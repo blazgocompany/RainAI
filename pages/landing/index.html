@@ -1,0 +1,260 @@
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Nunito:200,200i');
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+    @import url('https://fonts.googleapis.com/css?family=Varela+Round');
+    body {
+        background: black;
+        overflow-x: hidden;
+        min-height: 500vh;
+        margin: 0;
+    }
+
+    .hero {
+        padding: 16px;
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: radial-gradient(circle at 50% -10%, var(--gradient-color), transparent 50%)
+    }
+
+    .herotext {
+        color: white !important;
+        font-size: 64px;
+
+        font-family: sans-serif;
+    }
+
+    .herotext svg {
+        transform: translateY(-4px);
+        display: inline;
+        vertical-align: middle;
+        background-color: transparent;
+    }
+
+    .herotext {
+        display: inline-block;
+        position: relative;
+        z-index: 10;
+
+    }
+    .content{
+        color: white;
+        display: none;
+        font-family: "Varela Round";
+        text-align: center;
+    }
+    .highlight{
+        color: gold;
+        
+    }
+    .getstarted{
+        background-color: gold;
+        padding: 8px 16px;
+        border-radius: 32px;
+        border: none;
+    }
+    .getstarted:hover{
+        background-color: #e6c300
+    }
+    .nav{
+        position: fixed;
+        top: -36px;
+        background:
+        radial-gradient(circle at 0% center, rgb(215, 215, 0), transparent 80%);
+        backdrop-filter: blur(8px);
+        width: calc(100% - 32px);
+        height: 36px;
+        z-index: 1000;
+        left: 50%;
+        transform: translate(-50%, 0);
+        max-width: 500px;
+        border-radius: 32px;
+        
+
+    }
+    .cta-login{
+        float: right;
+        padding: 4px
+    }
+    .login{
+        height: 30px;
+        width: 64px;
+        border-radius: 20px;
+        border: none;
+        background: gold;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<div class="nav">
+    <span class="logo">
+        
+    </span>
+    <span class="cta-login">
+        <button class="login">Log in</button>
+    </span>
+</div>
+<div class="hero">
+    <h1 class="herotext">The future of Generative AI is here.</h1>
+    
+</div>
+<div class="content">
+    <h2>Rain helps you build fast, scalable AI-based apps at a low cost.</h2>
+    <p>Seamlessly integrate powerful AI capabilities into your applications, with a quick and <span class="highlight">efficient</span> solution for developing next-generation <span class="highlight">smart</span> software.</p>
+    <button class="getstarted">Get Started</button>
+</div>
+<script>
+    function setTransformOriginToChild() {
+        const parent = document.querySelector('.herotext');
+        const child = document.querySelector('.herotext .star');
+
+        const parentRect = parent.getBoundingClientRect();
+        const childRect = child.getBoundingClientRect();
+
+        const childCenterX = (childRect.left - 10 + childRect.right) / 2;
+        const childCenterY = (childRect.top + 4 + childRect.bottom) / 2;
+
+        const transformOriginX = (childCenterX - parentRect.left) / parentRect.width * 100;
+        const transformOriginY = (childCenterY - parentRect.top) / parentRect.height * 100;
+
+        parent.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
+    }
+
+
+
+    window.addEventListener('resize', setTransformOriginToChild);
+
+
+
+
+    // Function to split text into multiple spans
+    function splitTextIntoSpans() {
+        // Get the container element
+        const container = document.querySelector('.herotext');
+
+        // Get the text content of the container
+        const text = container.textContent;
+
+        // Create a document fragment to hold the new span elements
+        const fragment = document.createDocumentFragment();
+
+        // Define words to style
+        const wordsToStyle = {
+            'future': 'black',
+            'AI': 'black'
+        };
+
+        // Helper function to create span elements for text
+        function createSpansForText(text, color = '') {
+            const fragment = document.createDocumentFragment();
+            for (let char of text) {
+                const span = document.createElement('span');
+                span.textContent = char;
+                if (color) {
+                    span.style.color = color;
+                }
+                fragment.appendChild(span);
+            }
+            return fragment;
+        }
+
+        // Process the text letter by letter
+        let index = 0;
+        while (index < text.length) {
+            // Find the next word or space
+            let nextSpace = text.indexOf(' ', index);
+            if (nextSpace === -1) {
+                nextSpace = text.length;
+            }
+
+            var word = text.slice(index, nextSpace);
+
+            // Add a space character after the word
+            if (nextSpace < text.length) {
+                word += ' ';
+            }
+
+            // Create spans for each letter of the word
+            const color = wordsToStyle[word.trim()] || '';
+            const wordFragment = createSpansForText(word, color);
+            fragment.appendChild(wordFragment);
+
+            // If the word is "AI", add a special span element after it
+            if (word.trim() === 'AI') {
+                const starSpan = document.createElement('span');
+                starSpan.className = 'star';
+                starSpan.innerHTML = `
+      <svg width="32" height="24">
+        <path d="M 2 12 q 10 0 10 -10 q 0 10 10 10 q -10 0 -10 10 q 0 -10 -10 -10 M 0 12 A 1 1 0 0 0 24 12 A 1 1 0 0 0 0 12"></path>
+      </svg>`;
+                fragment.appendChild(starSpan);
+            }
+
+            // Move to the next word
+            index = nextSpace + 1;
+        }
+
+        // Clear the original container
+        container.textContent = '';
+
+        // Append the fragment to the container
+        container.appendChild(fragment);
+    }
+    function calculateTravelDistance() {
+        // Get the .star element
+        const starElement = document.querySelector('.herotext .star');
+
+        // Get the bounding rectangle of the .star element
+        const starRect = starElement.getBoundingClientRect();
+
+        // Get the center of the .star element
+        const starCenterX = starRect.left + starRect.width / 2;
+        const starCenterY = starRect.top + starRect.height / 2;
+
+        // Get the center of the screen
+        const screenCenterX = window.innerWidth / 2;
+        const screenCenterY = window.innerHeight / 2;
+
+        // Calculate the amount to move the element
+        const moveX = screenCenterX - starCenterX;
+        const moveY = screenCenterY - starCenterY;
+
+        return { moveX, moveY };
+    }
+    // Call the function to split the text
+    window.addEventListener('load', () => {
+        splitTextIntoSpans();
+        setTransformOriginToChild()
+        tl = gsap.timeline({
+        })
+        tl.set(".herotext span", { filter: "blur(32px)" })
+        tl.set(".hero", { "--gradient-color": "#FFD700" })
+        tl.set(".herotext svg", { fill: "white" })
+        tl.to(".herotext span", { filter: "blur(0px)", duration: 0.5, stagger: 0.05 })
+        tl.to(".herotext", { y: calculateTravelDistance().moveY, x: calculateTravelDistance().moveX, duration: 3, fill: "black", ease: "power4.in" }, "+=0.5")
+        tl.to(".herotext", { scale: 90, duration: 3, ease: "power4.in" }, "<")
+        tl.to(".herotext svg", { duration: 1, fill: "black", background: "transparent" }, "-=1")
+        tl.to(".hero", { duration: 1, "--gradient-color": "#000" }, "-=1")
+        tl.to(".nav", { duration: 1, top: "16px"}, "-=1")
+        tl.pause(0.5)
+    });
+
+    document.addEventListener("scroll", () => {
+        //get scroll position
+        const scrollPosition = window.scrollY;
+        if((scrollPosition / 200) + 0.5 < 5.8){
+            gsap.set(".hero", {display: "block"})
+            gsap.set(".content", {display: "none"})
+            tl.pause((scrollPosition / 200) + 0.5)
+        }
+        else{
+            gsap.set(".hero", {display: "none"})
+            gsap.set(".content", {position: "relative", top: 1060+window.innerHeight, display: "block"})
+        }
+
+    })
+    document.querySelector(".getstarted").addEventListener("click", ()=>{
+        let clickTl = gsap.timeline({})
+        clickTl.to(".getstarted", {scale: 100, duration: 2, ease: "power4.in"})
+        clickTl.to(".getstarted", {background: "black", color: "black", duration: 1, ease: "power4.in"}, "-=1")
+    })
+</script>
